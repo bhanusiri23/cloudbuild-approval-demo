@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CI/CD Approval Dashboard</title>
+  <link rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Cloud Build CI/CD Pipeline</h1>
+    <p>Build, test and approve your application release</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Pipeline Workflow</h2>
+      <div class="stages">
+        <div class="stage">1. Source Code</div>
+        <div class="stage">2. Build & Test</div>
+        <div class="stage active" id="approvalStage">
+          3. Approval Gate
+        </div>
+        <div class="stage" id="deployStage">4. Deployment</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Approval Dashboard</h2>
+      <p>Current status:
+        <strong id="status">Pending</strong>
+      </p>
+      <p id="stage">Waiting for approval</p>
+
+      <div class="actions">
+        <button id="approveBtn">Approve</button>
+        <button id="rejectBtn">Reject</button>
+      </div>
+
+      <p id="message" role="status">
+        Choose an action to demonstrate the approval gate.
+      </p>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
