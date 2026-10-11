@@ -25,3 +25,9 @@ jobs:
 
       - name: Check Python syntax
         run: python -m py_compile app.py
+
+      - name: Build Docker image
+        run: docker build -t cloudbuild-approval-demo:latest .
+
+      - name: Verify Docker image
+        run: docker image inspect cloudbuild-approval-demo:latest
