@@ -3,12 +3,20 @@ name: Approval Gate Demo
 
 on:
   workflow_dispatch:
+    inputs:
+      decision:
+        description: "Approve or reject deployment"
+        required: true
+        type: choice
+        options:
+          - approve
+          - reject
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
+      - name: Checkout source code
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -22,10 +30,28 @@ jobs:
       - name: Verify Python syntax
         run: python -m py_compile app.py
 
-  deploy:
+      - name: Build Docker image
+        run: docker build -t cloudbuild-approval-demo:latest .
+
+  approval:
     needs: test
     runs-on: ubuntu-latest
-    environment: production
+    steps:
+      - name: Check approval decision
+        env:
+          DECISION: ${{ inputs.decision }}
+        run: |
+          if [ "$DECISION" = "approve" ]; then
+            echo "Deployment approved."
+          else
+            echo "Deployment rejected."
+            exit 1
+          fi
+
+  deploy:
+    needs: approval
+    runs-on: ubuntu-latest
     steps:
       - name: Simulate deployment
-        run: echo "Approval gate passed. Deployment step executed."
+        run: echo "Approved application deployment simulated successfully."
+
